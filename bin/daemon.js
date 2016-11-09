@@ -3,12 +3,8 @@
 var Q = require('kew');
 var pg = require('pg');
 var PostgresCouchDB = require('../lib');
-var DaemonSettings = require('../config/daemon.js');
-
-var daemon_settings = new DaemonSettings();
 
 var PostgresCouchContainer = [];
-
 
 var control_port = 8888;
 
@@ -31,22 +27,9 @@ time findFeeds executes.
 
 var pgclient = '';
 
-function pgClientUrl() {
-  var url_prefix = "postgres://" + daemon_settings["postgres"]["username"];
-
-  var pg_pass = daemon_settings["postgres"]["password"];
-  var url_optional_pass = pg_pass ? (":" + pg_pass) : "";
-
-  var url_postfix = "@" + daemon_settings["postgres"]["host"] +
-                    "/" + daemon_settings["postgres"]["database"];
-
-  return (url_prefix + url_optional_pass + url_postfix);
-};
-
 function connectPostgres(do_one_find){
     if(postgres_dead == true){
-  pg_client_url = pgClientUrl();
-	pgclient = new pg.Client(pg_client_url);
+	pgclient = new pg.Client(process.env.PG_CONNSTR);
 	pgclient.connect(function(err) {
 	    if (err) {
                 if(err.code == 'ECONNREFUSED'){ //try to catch here but i dont think works
@@ -119,7 +102,7 @@ function findFeeds(find_once) {
 
                     PostgresCouchContainer[pgtable] = new PostgresCouchDB(pgclient, {
                         couchdb: {
-                            url: daemon_settings["couchdb"]["url"],
+                            url: process.env.COUCH_URL,
                             pgtable: pgtable,
                             since: result.rows[i].since,
                             database: couchdb
@@ -130,7 +113,7 @@ function findFeeds(find_once) {
                     console.log('FINDER: Found ' + pgtable + ' processing changes since: ' + result.rows[i].since);
 
                     PostgresCouchContainer[pgtable].events.on('connect', console.log);
-		  
+
                     PostgresCouchContainer[pgtable].events.on('checkpoint', console.log);  //Comment out if too much info
                     PostgresCouchContainer[pgtable].events.on('checkpoint.error', function(msg, err) {
                         console.error(msg, err);
@@ -322,7 +305,3 @@ setTimeout(function() {
 setTimeout(function() {
     feedsWatchdog(false); //with timout to reinvoke itself
 }, feedswatchdog_interval);
-
-
-
-

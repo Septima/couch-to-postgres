@@ -1,6 +1,6 @@
 {
   "name": "couch-to-postgres",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Node libary to watch CouchDB _changes and update PostgreSQL",
   "main": "index.js",
   "bin": {
@@ -20,14 +20,13 @@
   ],
   "author": "Mike Wolman <mike@wolman.co.uk>",
   "license": "BSD",
-  "homepage": "https://github.com/sysadminmike/couch-to-postgres",
+  "homepage": "https://github.com/Septima/couch-to-postgres",
   "dependencies": {
-
-    "kew": "0.5.0-alpha.1",
-    "pg": "4.1.1",
-    "pg-escape": "0.0.3",
-    "async": "0.9.0",
-    "follow": "0.11.4",
-    "events": "1.0.2"
+    "kew": "0.7.0",
+    "pg": "4.5.6",
+    "pg-escape": "0.2.0",
+    "async": "1.5.2",
+    "follow": "0.12.1",
+    "events": "1.1.1"
   }
 }
