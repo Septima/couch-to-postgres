@@ -215,16 +215,13 @@ function pgWatchdog(){
 
 function pgtableCheck(pgtbl) {
 
-    var sql = "SELECT EXISTS (SELECT 1 FROM   pg_catalog.pg_class c JOIN ";
-    sql += "pg_catalog.pg_namespace n ON n.oid = c.relnamespace ";
-    sql += "WHERE  n.nspname = 'public' AND c.relkind = 'r' ";
-    sql += "AND c.relname = '" + pgtbl + "') AS mytest";
+    var sql = "SELECT to_regclass('" + pgtbl + "') as exists";
     pgclient.query(sql, function(err, result) {
         if (err) {
             console.error(sql, err);
             process.exit();
         } else {
-            if (result.rows[0].mytest.toString() == 'false') {
+            if (!result.rows[0].exists) {
                 sql = "CREATE TABLE " + pgtbl + " ";
                 sql += "(id text, doc jsonb, CONSTRAINT ";
                 sql += pgtbl + "_pkey PRIMARY KEY (id) ) ";
