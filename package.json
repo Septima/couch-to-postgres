@@ -1,5 +1,5 @@
 {
-  "name": "couch-to-postgres",
+  "name": "septima-couch-to-postgres",
   "version": "0.1.0",
   "description": "Node libary to watch CouchDB _changes and update PostgreSQL",
   "main": "index.js",
@@ -19,6 +19,7 @@
     "transfer"
   ],
   "author": "Mike Wolman <mike@wolman.co.uk>",
+  "contributors": [ "Björn Harrtell <bjorn@septima.dk>" ],
   "license": "BSD",
   "homepage": "https://github.com/Septima/couch-to-postgres",
   "dependencies": {
